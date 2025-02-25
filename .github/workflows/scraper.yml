@@ -30,4 +30,7 @@ jobs:
       # Step 4: Run the crawler script
       - name: Run Crawler
         run: |
-          python dashboard.py 
+          pip install gunicorn
+          gunicorn -w 4 -b 0.0.0.0:5000 dashboard:app &
+
+ 
