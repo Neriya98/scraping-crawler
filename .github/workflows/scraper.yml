@@ -2,7 +2,7 @@ name: Run Scraper
 
 on:
   schedule:
-    - cron: "0 */72 * * *"  # Runs every 72 hours
+    - cron: "*/2 * * * *"  # Runs every 2 minutes
   workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
