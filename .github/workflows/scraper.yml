@@ -1,36 +1,28 @@
 name: Run Scraper
 
 on:
-  push:
-    branches:
-      - main  # Runs the scraper when code is pushed to the main branch
-  workflow_dispatch: # Allows manual triggering of the scraper through the GitHub UI
+  schedule:
+    - cron: "0 */72 * * *"  # Runs every 72 hours
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
   run_scraper:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
       - name: Check out repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: 3.12  
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt  
 
-      # Step 4: Run the crawler script
       - name: Run Crawler
         run: |
-          pip install gunicorn
-          gunicorn -w 4 -b 0.0.0.0:5000 dashboard:app &
-
- 
+          python scrapping.py

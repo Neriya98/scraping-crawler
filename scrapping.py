@@ -1,16 +1,17 @@
 # Import the packages
-import pandas as pd
-import numpy as np
-import datetime as dt
 import os
-from bs4 import BeautifulSoup
-import requests
-from scrapping_scripts.scrapping_script_tout_vendu import main_tout_vendu
-from scrapping_scripts.scrapping_script_bazar_afrique import main_bazar_afrique
-from scrapping_scripts.scrapping_script_carisowo import main_carisowo
-from scrapping_scripts.scrapping_script_coin_afrique import main_coin_afrique
-from scrapping_scripts.scrapping_script_iliko import main_iliko
+import time
+import pandas as pd
+import datetime as dt
 from scrapping_scripts.scrapping_script_mtn import main_mtn
+from scrapping_scripts.scrapping_script_iliko import main_iliko
+from scrapping_scripts.scrapping_script_carisowo import main_carisowo
+from scrapping_scripts.scrapping_script_tout_vendu import main_tout_vendu
+from scrapping_scripts.scrapping_script_coin_afrique import main_coin_afrique
+from scrapping_scripts.scrapping_script_bazar_afrique import main_bazar_afrique
+
+SITES_LIST = ["http://carisowo.com", "https://shop.mtn.bj", "https://www.toutvendu.bj",\
+              "https://www.iliko.bj", "https://bj.coinafrique.com", "https://bj.bazarafrique.com"]
 
 # Definition of the crawler
 class Crawler:
@@ -28,15 +29,13 @@ class Crawler:
         Initialize the crawler by creating (or overwriting) the necessary log and URL files.
         This method also writes the crawler creation timestamp to the log file.
         """
-        # Initialize the running flag
-        self.is_running = True
         # Define the date at which the crawler is initialized
         built_date = str(dt.datetime.today())[:-7]
         # Create the log file to store information about the operation executed
-        with open("./log_file.txt", "w", encoding="utf-8") as log_file:
+        with open("./files/log_file.txt", "w", encoding="utf-8") as log_file:
             log_file.write(f"Crawler created at {built_date}\n\n")
         # The file to store the urls we'll scrap
-        with open ("./urls_file.txt", "w", encoding="utf-8") as url_file:
+        with open ("./files/urls_file.txt", "w", encoding="utf-8") as url_file:
             url_file.write(f"Urls file created at {built_date}\n\n")
 
     # function to reset the state of the crawler
@@ -53,15 +52,15 @@ class Crawler:
         # Log the reset event
         reset_date = str(dt.datetime.today())[:-7]
         
-        for path in ["./log_file.txt", "./scraped_data.csv", "./urls_file.txt"]:
+        for path in ["./files/log_file.txt", "./files/scraped_data.csv", "./files/urls_file.txt"]:
             if os.path.exists(path):
                 os.remove(path)
         
         # Indicate that the file has been reset
-        with open("log_file.txt", "w", encoding="utf-8") as file:
+        with open("./files/log_file.txt", "w", encoding="utf-8") as file:
             file.write(f"The crawler has been reset and created on {reset_date}\n")
         
-        with open("urls_file.txt", "w", encoding="utf-8") as uf:
+        with open("./files/urls_file.txt", "w", encoding="utf-8") as uf:
             uf.write(f"The url file has been reset and created on {reset_date}\n")
         
         # Return the reset crawler instance
@@ -95,18 +94,18 @@ class Crawler:
             df = pd.concat([existing_data, new_scraped])
         
         # Save the new data base
-        df.to_csv("./scraped_data.csv")
+        df.to_csv("./files/scraped_data.csv")
         # Modify the urls file to add the new urls scraped
-        with open ("./urls_file.txt", "a", encoding="utf-8") as url_file:
+        with open ("./files/urls_file.txt", "a", encoding="utf-8") as url_file:
             url_file.writelines(new_scraped["Lien_produit"].astype(str) + "\n")
         # Modify the log_file to add the historic of actions
-        with open("./log_file.txt", "a") as log_file:
+        with open("./files/log_file.txt", "a") as log_file:
             log_file.write(f"{new_scraped['Lien_produit'].count()} new links scraped\n")
         
         return None
     
     # Function to scrap the data
-    def scrap(self, site_urls: list) -> None:
+    def scrap(self, site_urls = SITES_LIST) -> None:
         """
         Scrapes data from a list of website URLs.
         
@@ -125,12 +124,14 @@ class Crawler:
         Returns:
             None
         """
-        date_jour = dt.datetime.today().strftime("%H:%M")
-        with open("./log_file.txt", "a") as log_file:
-            log_file.write(f"Scrapping lunched at {date_jour}\n")
+        day_date = dt.datetime.today()
+        with open("./files/log_file.txt", "a") as log_file:
+            log_file.write(f"[Scrap] {day_date.strftime("%Y-%m-%d")} Doing scrapping for {site_urls}\n")
+            log_file.write(f"Scrapping lunched at {day_date.strftime("%H:%M")}\n")
 
         data_collected = []  # Will store individual DataFrames from each site
-
+        # The time the scraping started
+        start = time.time()
         for url in site_urls:
             if "carisowo" in url:
                 df = main_carisowo(url)
@@ -153,12 +154,13 @@ class Crawler:
             # if you want to skip those, you can do:
             if df is not None and not df.empty:
                 data_collected.append(df)
-
+        # Write in the log file when the scrapping is finished
+        with open("./files/log_file.txt", "a", encoding='utf-8') as lf:
+            lf.write(f"[Scrap] Scrapping finished in {(time.time() - start)/3600:.4f} hours\n")
         # If no data was collected at all, we can handle that case
-        date_jour = dt.datetime.today().strftime("%Y-%m-%d %H:%M")
         if not data_collected:
             print("No data was collected from the provided URLs.")
-            with open("./log_file.txt", "a") as log_file:
+            with open("./files/log_file.txt", "a") as log_file:
                 log_file.write(f"No data was collected from the provided URLs.\n")
             return
 
