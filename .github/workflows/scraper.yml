@@ -25,4 +25,4 @@ jobs:
 
       - name: Run Crawler
         run: |
-          python scrapping.py
+          python3 scrapping.py
