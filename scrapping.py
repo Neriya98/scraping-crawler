@@ -172,3 +172,7 @@ class Crawler:
 
         # Conclude the scraping by saving the data
         self.save_data(final_data)
+
+# Run the scraper 
+crawler = Crawler()
+crawler.scrap()  # Run the scraper
