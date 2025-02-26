@@ -175,4 +175,4 @@ class Crawler:
 
 # Run the scraper 
 crawler = Crawler()
-crawler.scrap()  # Run the scraper
+crawler.scrap(["https://shop.mtn.bj"])  # Run the scraper
