@@ -1,6 +1,0 @@
-Crawler created at 2025-02-26 00:39:49
-
-[Scrap] 2025-02-26 Doing scrapping for ['https://shop.mtn.bj']
-Scrapping lunched at 00:39
-[Scrap] Scrapping finished in 0.0009 hours
-71 new links scraped

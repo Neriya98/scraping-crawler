@@ -38,6 +38,6 @@ jobs:
         run: |
           git add files/scraped_data.csv files/log_file.txt files/urls_file.txt
           git commit -m "Update scraped data [$(date)]" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/Neriya98/scraping-crawler.git main
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/path_to_repo main
         env:
           GH_PAT: ${{ secrets.GH_PAT }}

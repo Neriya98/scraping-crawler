@@ -105,7 +105,7 @@ class Crawler:
         return None
     
     # Function to scrap the data
-    def scrap(self, site_urls = SITES_LIST) -> None:
+    def scrap(self, site_urls:list) -> None:
         """
         Scrapes data from a list of website URLs.
         
@@ -175,4 +175,4 @@ class Crawler:
 
 # Run the scraper 
 crawler = Crawler()
-crawler.scrap(["https://shop.mtn.bj"])  # Run the scraper
+crawler.scrap(SITES_LIST)  # Run the scraper
