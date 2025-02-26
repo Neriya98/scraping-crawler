@@ -1,4 +1,4 @@
-# **Automated Web Scraper – Private Repository**
+# **Automated Web Scraper**
 
 ## **📌 Project Overview**
 
