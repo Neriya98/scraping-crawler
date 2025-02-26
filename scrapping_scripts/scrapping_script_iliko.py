@@ -120,7 +120,7 @@ def scrape_products_from_category(category, base_url):
             break
         
         # Filtrer les liens déjà scrappés
-        with open("./urls_file.txt", "r", encoding="utf-8") as urls_file:
+        with open("./files/urls_file.txt", "r", encoding="utf-8") as urls_file:
             previous_links = set(line.strip() for line in urls_file if "iliko" in line)
 
         filtered_links = []
@@ -153,7 +153,7 @@ def scrape_products_from_category(category, base_url):
                     new_products.append(product_details)
 
         # Mise à jour du fichier urls_file.txt pour les nouveaux liens scrappés
-        with open("./urls_file.txt", "a", encoding="utf-8") as uf:
+        with open("./files/urls_file.txt", "a", encoding="utf-8") as uf:
             for link in filtered_links:
                 uf.write(link["href"] + "\n")
 

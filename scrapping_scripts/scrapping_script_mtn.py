@@ -75,7 +75,7 @@ def scrape_product_details(base_url):
         return []
 
     # Lire les anciens liens du fichier urls_file.txt
-    with open("./urls_file.txt", "r", encoding="utf-8") as urls_file:
+    with open("./files/urls_file.txt", "r", encoding="utf-8") as urls_file:
         previous_links = set(line.strip() for line in urls_file if "mtn" in line)
 
     # Filtrer les produits dont le lien a déjà été scrappé
@@ -102,7 +102,7 @@ def scrape_product_details(base_url):
                 all_products.append(product_data)
 
     # Mettre à jour urls_file.txt pour ne pas re-scraper les mêmes produits
-    with open("./urls_file.txt", "a", encoding="utf-8") as uf:
+    with open("./files/urls_file.txt", "a", encoding="utf-8") as uf:
         for product in filtered_products:
             url_ = product.select_one("a.product-card.shawdow-card.h-100")["href"]
             uf.write(url_ + "\n")

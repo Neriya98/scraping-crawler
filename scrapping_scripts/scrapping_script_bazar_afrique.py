@@ -130,7 +130,7 @@ def scrape_products_from_category(category, base_url):
         return []
 
     # Lire tous les liens déjà connus dans urls_file.txt (pour filtrer)
-    with open("urls_file.txt", "r", encoding="utf-8") as urls_file:
+    with open("./files/urls_file.txt", "r", encoding="utf-8") as urls_file:
         previous_links = set(line.strip() for line in urls_file if "bazarafrique" in line)
 
     # Construction des URL complètes pour la page actuelle
@@ -153,7 +153,7 @@ def scrape_products_from_category(category, base_url):
                 all_products.append(product_details)
 
     # Mettre à jour le fichier urls_file.txt avec les nouveaux liens
-    with open("./urls_file.txt", "a", encoding="utf-8") as urls_file:
+    with open("./files/urls_file.txt", "a", encoding="utf-8") as urls_file:
         for link in new_links:
             urls_file.write(link + "\n")
 

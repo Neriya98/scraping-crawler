@@ -128,7 +128,7 @@ def scrape_products_from_category(category, base_url):
         # Extraire les données de la page en parallèle
         product_args = []
         # Exclure les urls qui sont déjà scrappés
-        with open ("./urls_file.txt", "r", encoding="utf-8") as urls_file:
+        with open ("./files/urls_file.txt", "r", encoding="utf-8") as urls_file:
             previous_links = list(set([line.strip() for line in urls_file.readlines() if "carisowo" in line]))
 
         # Take the announces that contain the links differents from the ones that have been scrapped
@@ -153,7 +153,7 @@ def scrape_products_from_category(category, base_url):
                     all_products.append(result)
         # Mise à jour du fichier urls_file.txt pour les nouveaux liens scrappés
         product_urls = [product[0] for product in product_args]
-        with open("./urls_file.txt", "a", encoding="utf-8") as uf:
+        with open("./files/urls_file.txt", "a", encoding="utf-8") as uf:
             for link in product_urls:
                 uf.write(link + "\n")
 

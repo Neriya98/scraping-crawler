@@ -119,7 +119,7 @@ def scrape_products_from_category(category, base_url):
             break
 
         # Lecture des liens déjà scrappés
-        with open("./urls_file.txt", "r", encoding="utf-8") as urls_file:
+        with open("./files/urls_file.txt", "r", encoding="utf-8") as urls_file:
             previous_links = set(line.strip() for line in urls_file if "toutvendu" in line)
 
         # Filtrer les produits déjà scrappés
@@ -153,7 +153,7 @@ def scrape_products_from_category(category, base_url):
                     new_products.append(result)
 
         # Mise à jour du fichier urls_file.txt avec les nouveaux liens scrappés
-        with open("./urls_file.txt", "a", encoding="utf-8") as uf:
+        with open("./files/urls_file.txt", "a", encoding="utf-8") as uf:
             for product in filtered_products:
                 link_el = product.select_one("a[href*='/details']")
                 product_url = f"{base_url}{link_el['href']}"
