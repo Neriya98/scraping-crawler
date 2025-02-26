@@ -2,8 +2,8 @@ name: Run Scraper
 
 on:
   schedule:
-    - cron: "*/2 * * * *"  # Runs every 2 minutes
-  workflow_dispatch:
+    - cron: "0 0 */3 * *"  # Runs every 3 days (72 hours)
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   run_scraper:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # Avoid using the default GitHub token
 
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -26,3 +28,13 @@ jobs:
       - name: Run Crawler
         run: |
           python3 scrapping.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add files/scraped_data.csv files/log_file.txt files/urls_file.txt
+          git commit -m "Update scraped data [$(date)]" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/your-username/your-repo.git main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
